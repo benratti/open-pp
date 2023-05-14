@@ -1,0 +1,92 @@
+<div class="global-layout">
+    <div class="layout">
+        <div class="first-line-layout">
+            <div class="box players-container">
+                <div class="top-player" *ngFor="let player of getPlayers('top')">
+                    <app-player [player]="player"></app-player>
+                </div>
+            </div>
+        </div>
+        <div class="second-line-layout">
+            <div class="box left-players">
+                <app-player *ngFor="let player of getPlayers('left')" [player]="player"></app-player>
+            </div>
+            <div class="table-container">
+                <button (click)="onStart()" *ngIf="vote === 'not_started'" class="border round">
+                    <i>start</i>
+                    <span>Lancer l'estimation</span>
+                </button>
+                <button (click)="onStop()" *ngIf="isCompleted()" class="border round">
+                    <i>visibility</i>
+                    <span>Réveler les estimations</span>
+                </button>
+                <div class="center-align" *ngIf="isInProgress() && allVotesCompleted() !== true">
+                    <a class="loader large"></a>
+                    <p><strong>Estimation en cours</strong></p>
+                </div>
+                <div class="center-align" *ngIf="isDone() && hasConsensus()">
+                    <i>thumb_up</i>
+                    <p><strong>Un consensus a été trouvé !</strong></p>
+                </div>
+                <div class="center-align" *ngIf="isDone() && !hasConsensus()">
+                    <i>thumbs_up_down</i>
+                    <p><strong>Les avis divergent !</strong></p>
+                </div>
+
+            </div>
+
+            <div class="box right-players">
+                <app-player *ngFor="let player of getPlayers('right')" [player]="player"></app-player>
+            </div>
+        </div>
+        <div class="third-line-layout">
+            <div class="players-container">
+                <div class="bottom-player box" *ngFor="let player of getPlayers('bottom')">
+                    <app-player [player]="player"></app-player>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="isInProgress()" class="fill small-height middle-align center-align">
+        <div class="center-align">
+            <i class="extra">poll</i>
+            <h5 class="center-align">Veuillez indiquer votre estimation</h5>
+
+            <nav  class="no-space vote-bar">
+                <button *ngFor="let choice of choiceTable" class="border tertiary no-round"
+                    [ngClass]="{ fill : myChoice === '1',
+                 'left-round' : choiceTable[0] === choice,'right-round' : choiceTable[choiceTable.length - 1] === choice}" (click)="selectVote(choice)"><span>{{choice}}</span></button>
+            </nav>
+        </div>
+    </div>
+
+    <div *ngIf="vote === 'done'" class="fill medium-height middle-align center-align">
+        <div class="center-align">
+            <i class="extra">mail</i>
+            <h5 class="center-align">L'estimation est terminée</h5>
+            <div *ngIf="!hasConsensus()">
+                <div *ngFor="let choice of choiceTable">
+                    <div *ngIf="getResultByChoice(choice) !== 0" class="row">
+                        <div class="left-align">{{choice}}</div>
+                        <div class="left-align">-</div>
+                        <div class="max left-align">{{getResultByChoice(choice)}} vote(s)</div>
+                        <div *ngFor="let player of getPlayersByChoice(choice)">{{player.alias}}</div>
+                    </div>
+                    <div *ngIf="getResultByChoice(choice) !== 0" class="small-divider"></div>
+                </div>
+            </div>
+            <div *ngIf="hasConsensus()">
+                <h6>Le résultat de l'estimation est {{ getConsensusResult()}}</h6>
+            </div>
+            <div class="space"></div>
+            <nav class="center-align">
+                <button *ngIf="!hasConsensus()" class="round" (click)="onStart()">Obtenir un consensus</button>
+                <button class="round secondary">Valider le résutlat</button>
+            </nav>
+        </div>
+
+    </div>
+
+</div>
