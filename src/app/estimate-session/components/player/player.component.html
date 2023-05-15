@@ -1,6 +1,6 @@
-<div class="chip max" [ngClass]="{primary : player.status !== 'observer'}">
+<div class="chip max" [ngClass]="{primary : player.status !== 'observer'}" disabled="player.status === 'observer'">
     <span>{{player.alias}}</span>
-    <i *ngIf="player.status === 'none'">account_circle</i>
+    <i *ngIf="player.status === 'none'">sports_esports</i>
     <i *ngIf="player.status === 'vote_in_progress'">updated</i>
     <i *ngIf="player.status === 'vote_completed'">task_alt</i>
     <i *ngIf="player.status === 'observer'">cruelty_free</i>

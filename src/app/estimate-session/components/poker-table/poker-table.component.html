@@ -1,4 +1,8 @@
 <div class="global-layout">
+    <div>
+        <h3>{{sessionName}}</h3>
+        <h4>Estimation en cours : {{issue.title}}</h4>
+    </div>
     <div class="layout">
         <div class="first-line-layout">
             <div class="box players-container">
@@ -83,7 +87,7 @@
             <div class="space"></div>
             <nav class="center-align">
                 <button *ngIf="!hasConsensus()" class="round" (click)="onStart()">Obtenir un consensus</button>
-                <button class="round secondary">Valider le résutlat</button>
+                <button *ngIf="hasConsensus()" class="round" (click)="onValidate()">Valider le résutlat</button>
             </nav>
         </div>
 
