@@ -1,0 +1,5 @@
+<div class="layout">
+    <app-issue-card *ngFor="let issue of issues; " 
+    [issue]="issue"
+    (issueSelected)="onSelectedIssue($event)"></app-issue-card>
+</div>

@@ -1,0 +1,18 @@
+<article class="border"
+    [ngClass]=" { fill : issue.isVoting }">
+        <h6><i>description</i><span>{{issue.title}}</span></h6>
+        <p *ngIf="issue.description">{{issue.description}}</p>
+        <div class="row">
+        <nav class="max left-align">
+            <button class="border round" [disabled]="issue.isVoting" (click)="onSelectedIssue()">
+                <span *ngIf="!issue.weigth">Estimer</span>
+                <span *ngIf="issue.weigth">Estimer à nouveau</span>
+            </button>
+        </nav>
+        <div *ngIf="issue.weigth"> 
+            <span><strong>Complexité :</strong></span> 
+            <span >{{issue.weigth}}</span>
+        </div>
+    </div>
+    
+</article>

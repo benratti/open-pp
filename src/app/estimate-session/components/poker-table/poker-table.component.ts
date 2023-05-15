@@ -1,14 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Player } from '../../models/player.model';
 import { PlayersService } from '../../services/players.service';
 import { PlayerVoteStatus } from '../../models/player-vote-status.enum';
 import { VoteStatus } from '../../models/vote-status.enum';
+import { Issue } from '../../models/issue';
 
 @Component({
   selector: 'app-poker-table',
@@ -17,11 +20,16 @@ import { VoteStatus } from '../../models/vote-status.enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokerTableComponent implements OnInit {
+
+  @Input() sessionName !: string
   @Input() players!: Player[];
   @Input() vote: VoteStatus = VoteStatus.NOT_STARTED;
   myChoice : string = 'No Choice';
   @Input() myId!: string;
   @Input() choiceTable: string[] = ['1', '2', '3']; //, '5', '8', '13', '21', '?'];
+  @Input() issue !: Issue; 
+
+  @Output() estimateEvent = new EventEmitter<Issue>();
 
   constructor() {}
 
@@ -77,6 +85,15 @@ export class PokerTableComponent implements OnInit {
           distribution.top + distribution.right + distribution.bottom
         );
     }
+  }
+
+
+  onValidate() {
+    console.log("validation de l'estimation du " + this.issue.title); 
+    this.estimateEvent.emit({
+      ...this.issue, 
+      weigth : this.getConsensusResult()
+    })
   }
 
   onStart(): void {
