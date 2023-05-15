@@ -56,7 +56,7 @@
 
             <nav  class="no-space vote-bar">
                 <button *ngFor="let choice of choiceTable" class="border tertiary no-round"
-                    [ngClass]="{ fill : myChoice === '1',
+                    [ngClass]="{ fill : myChoice === choice, 
                  'left-round' : choiceTable[0] === choice,'right-round' : choiceTable[choiceTable.length - 1] === choice}" (click)="selectVote(choice)"><span>{{choice}}</span></button>
             </nav>
         </div>
