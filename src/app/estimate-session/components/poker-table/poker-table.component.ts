@@ -3,8 +3,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Player } from '../../models/player.model';
@@ -19,7 +21,7 @@ import { Issue } from '../../models/issue';
   styleUrls: ['./poker-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokerTableComponent implements OnInit {
+export class PokerTableComponent implements OnInit, OnChanges {
 
   @Input() sessionName !: string
   @Input() players!: Player[];
@@ -32,6 +34,13 @@ export class PokerTableComponent implements OnInit {
   @Output() estimateEvent = new EventEmitter<Issue>();
 
   constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes); 
+    if (changes['issue']) {
+      this.vote = VoteStatus.NOT_STARTED; 
+    }
+  }
 
   ngOnInit(): void {
     
