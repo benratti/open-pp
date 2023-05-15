@@ -1,0 +1,9 @@
+.vscode
+.git
+.gitignore
+.editorconfig
+documentation
+node_modules
+dist
+Dockerfile
+README.md
