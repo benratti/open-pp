@@ -29,13 +29,10 @@ public class EstimateSessionServiceImpl implements EstimateSessionService{
 
     public EstimateSession byUID(String uid) throws ResourceNotFoundException {
         var estimateSessionList = this.template.query("select * from estimate_session where uid=?", this.estimateSessionRowMapper, uid);
-        if (estimateSessionList.isEmpty()) {
+        if (estimateSessionList.isEmpty() || estimateSessionList.size() > 1) {
             throw new ResourceNotFoundException();
         }
         return estimateSessionList.get(0);
     }
 
-    public Collection<EstimateSession> byName(String name) {
-        return this.template.query("select * from estimate_session where name=?", this.estimateSessionRowMapper, name);
-    }
 }
