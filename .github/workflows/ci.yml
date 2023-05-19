@@ -11,7 +11,7 @@ on:
       - main
 
 jobs: 
-  unit-tests:
+  api-unit-tests:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v3
@@ -20,20 +20,25 @@ jobs:
         with: 
           java-version: '17'
           distribution: 'temurin'
-      - name: run api unit tests
+      - name: Run api unit tests
         working-directory: ./api
         run: mvn --batch-mode test
-      - name: install front dependencies
+
+  front-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install front dependencies
         working-directory: ./front
         run: npm ci
-      - name: run front unit test
+      - name: Run front unit tests
         working-directory: ./front
         run: npm run test-headless
 
 
   integration-tests: 
     runs-on: ubuntu-latest
-    needs: unit-tests
+    needs: [api-unit-tests,front-unit-tests]
     steps: 
       - uses: actions/checkout@v3
       - name: Build docker images
