@@ -8,9 +8,8 @@ import java.util.Collection;
 public interface EstimateSessionService {
 
 
-     Collection<EstimateSession> all();
+    Collection<EstimateSession> all();
 
     EstimateSession byUID(String uid) throws ResourceNotFoundException;
 
-    Collection<EstimateSession> byName(String name);
 }
