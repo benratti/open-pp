@@ -14,10 +14,20 @@ describe('IssueCardComponent', () => {
 
     fixture = TestBed.createComponent(IssueCardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
+  
   });
 
   it('should create', () => {
+    component.issue = {
+      id : "aaaa",
+      title : "my-title", 
+      isVoting : false,
+      description : "a little description" 
+    }
+
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 });

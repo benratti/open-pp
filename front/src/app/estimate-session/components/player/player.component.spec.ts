@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlayerComponent } from './player.component';
+import { PlayerVoteStatus } from "./../../models/player-vote-status.enum";
 
 describe('PlayerComponent', () => {
   let component: PlayerComponent;
@@ -14,10 +15,21 @@ describe('PlayerComponent', () => {
 
     fixture = TestBed.createComponent(PlayerComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
   });
 
   it('should create', () => {
+
+
+
+    component.player = {
+      status : PlayerVoteStatus.OBSERVER, 
+      alias : "Wonder Alias",
+      id : "azer-reza-erz-ezez"
+    }; 
+
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 });
