@@ -1,18 +1,19 @@
 package com.benratti.openpp.api.rest;
 
-import com.benratti.openpp.api.exceptions.ResourceNotFoundException;
 import com.benratti.openpp.api.models.EstimateSession;
 import com.benratti.openpp.api.services.EstimateSessionService;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.ServerResponse;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/estimates")
+@RequestMapping(
+        value = "/estimates"
+)
+
 public class EstimateSessionController {
 
     private final EstimateSessionService service;
@@ -26,7 +27,7 @@ public class EstimateSessionController {
      * connected user.
      * @return list of estimate session
      */
-    @GetMapping("/")
+    @GetMapping
     Collection<EstimateSession> getAll() {
         return service.all();
     };
@@ -41,7 +42,16 @@ public class EstimateSessionController {
         return service.byUID(id);
     };
 
+    @PostMapping(
+            consumes = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    ServerResponse post(@RequestBody EstimateSession session) {
+    //    state( session.uid() == null || session.uid().isBlank(), "uid must not be specified!");
+    //    state( session.name() != null && );
+        String uid = service.create(session);
 
+        return ServerResponse.created(URI.create("/estimates/" + uid)).build();
+    }
 
 
 

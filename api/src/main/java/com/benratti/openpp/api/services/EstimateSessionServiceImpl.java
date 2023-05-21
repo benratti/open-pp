@@ -1,38 +1,46 @@
 package com.benratti.openpp.api.services;
 
+import com.benratti.openpp.api.data.entities.EstimateSessionRepository;
 import com.benratti.openpp.api.exceptions.ResourceNotFoundException;
 import com.benratti.openpp.api.models.EstimateSession;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-public class EstimateSessionServiceImpl implements EstimateSessionService{
+public class EstimateSessionServiceImpl implements EstimateSessionService {
 
-    private final JdbcTemplate template;
+    @Autowired
+    private EstimateSessionRepository repository;
 
-    private final RowMapper<EstimateSession> estimateSessionRowMapper = (rs, rowNom) -> new EstimateSession(
-                    rs.getString("uid"),
-                    rs.getString("name"),
-                    rs.getInt("capacity"));
-
-
-    public EstimateSessionServiceImpl(JdbcTemplate template) {
-        this.template = template;
-    }
-
+    @Override
     public Collection<EstimateSession> all() {
-        return this.template.query("select * from estimate_session", this.estimateSessionRowMapper);
+        var sessions = new ArrayList<EstimateSession>();
+        repository.findAll()
+                .forEach(entity ->
+                        sessions.add(
+                                new EstimateSession(entity.getUid(), entity.getName(), entity.getCapacity())
+                        )
+                );
+        return sessions;
     }
 
+    @Override
     public EstimateSession byUID(String uid) throws ResourceNotFoundException {
-        var estimateSessionList = this.template.query("select * from estimate_session where uid=?", this.estimateSessionRowMapper, uid);
-        if (estimateSessionList.isEmpty() || estimateSessionList.size() > 1) {
+        var optionalEntity = repository.findById(uid);
+        if (optionalEntity.isPresent()) {
+            var entity = optionalEntity.get();
+            return new EstimateSession(entity.getUid(), entity.getName(), entity.getCapacity());
+        } else {
             throw new ResourceNotFoundException();
         }
-        return estimateSessionList.get(0);
     }
 
+    @Override
+    public String create(EstimateSession session) {
+        return null;
+    }
 }
